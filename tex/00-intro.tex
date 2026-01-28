@@ -10,7 +10,7 @@ In this assignment you will experiment with two common methods of imitation lear
 \includegraphics[width=\textwidth]{figures/hw1_codebase.png}
 We have provided you with starter code for this homework. A simplistic diagram of its structure is shown above. In the \texttt{agents} directory, you will define your main behavior cloning agent. This agent will contain contain references to its policy (or actor) and replay buffer. This agent will be fed into the BC trainer, which will contain its training loop.\\
 \\
-We recommend that you read the files in the following order. 
+We recommend that you read the files in the following order. Your task is to fill in the blanks labeled \texttt{TODO}.
 
 \begin{itemize}
 \item \texttt{scripts/run\_hw1.py (read-only file)}
@@ -22,7 +22,12 @@ We recommend that you read the files in the following order.
 \item \texttt{infrastructure/pytorch\_util.py}
 \end{itemize}
 
+\vspace{0.2cm}
+
+\noindent\textbf{Use of GPT/Codex/Copilot/Any AI code assistant/agent:} For the sake of deeper understanding on implementing imitation learning methods, assistance from generative models to write code for this homework is prohibited. 
+
 You will submit the entire \texttt{submission} directory. To do so run the command  below from the \texttt{src} directory
+
 \begin{verbatim}
     bash collect_submission.sh
 \end{verbatim}
