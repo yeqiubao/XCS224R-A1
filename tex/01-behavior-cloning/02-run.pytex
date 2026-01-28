@@ -1,0 +1,24 @@
+\item \points{1b} \noindent \textbf{Run Behavior Cloning} 
+
+Run behavioral cloning (BC) and report results on two tasks: the Ant environment, where a behavioral cloning agent should achieve at least $30\%$ of the performance of the expert, and one environment of your choosing where it does not. For your reference, the other environments with expert data include Hopper, Walker2d, and HalfCheetah. A policy that achieves greater than $30\%$ of the expert on the Ant task will receive full credit on the autograder. Here is how you can run the Ant task:
+\begin{tcolorbox}[width=\linewidth, sharp corners=all, colback=white!95!black]
+\begin{verbatim}
+python run_hw1.py \
+    --expert_policy_file xcs224r/policies/experts/Ant.pkl \
+    --env_name Ant-v4 --exp_name bc_ant --n_iter 1 \
+    --expert_data xcs224r/expert_data/expert_data_Ant-v4.pkl \
+    --video_log_freq -1
+\end{verbatim}
+\end{tcolorbox}
+
+\noindent When providing results, report the mean and standard deviation of your policy’s return over multiple rollouts in a table, and state which task was used. When comparing one that is working versus one that is not working, be sure to set up a fair comparison in terms of network size, amount of data, and number of training iterations. \\
+\\
+\noindent \textbf{Note:} To report the mean and standard deviation, your eval batch size should be greater than \texttt{ep\_len}, so that you’re collecting multiple rollouts when evaluating the performance of your trained policy. For example, if \texttt{ep\_len} is $1000$ and \texttt{eval\_batch\_size} is $5000$, then you’ll be collecting approximately 5 trajectories (maybe more if any of them terminate early), and the logged \texttt{Eval\_AverageReturn} and \texttt{Eval\_StdReturn} represents the mean and standard deviation of your policy over these 5 rollouts. \\
+\\
+\textbf{Tip:} To generate videos of the policy, remove the flag \texttt{--video\_log\_freq -1}. However, this is slower, and so you will want to keep this flag on while debugging. \\
+
+
+🐍
+import re
+with open('submission.tex') as f: print((re.search(r'% <SCPD_SUBMISSION_TAG>_1b(.*?)% <SCPD_SUBMISSION_TAG>_1b', f.read(), re.DOTALL)).group(1))
+🐍

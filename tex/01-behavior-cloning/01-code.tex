@@ -1,0 +1,32 @@
+\item \points{1a} \noindent \textbf{Behavior Cloning Coding} 
+
+Implement the following functions within the below mentioned files to finish the implementation: 
+
+\begin{itemize}
+    \item ~infrastructure/pytorch_util.py~ 
+    \begin{itemize}
+        \item ~build_mlp~ 
+    \end{itemize}
+	\item ~policies/MLP_policy.py~ 
+	\begin{itemize}
+        \item ~MLPPolicySL::forward~
+        \item ~MLPPolicySL::get_action~
+        \item ~MLPPolicySL::update~
+        \item ~MLPPolicySL::update~
+    \end{itemize}
+	\item ~infrastructure/utils.py~ 
+	\begin{itemize}
+        \item ~sample_trajectory~
+        \item ~sample_trajectories~
+        \item ~sample_n_trajectories~ 
+    \end{itemize}
+	\item ~infrastructure/replay_buffer.py~ 
+    \begin{itemize}
+        \item ~ReplayBuffer::sample_random_data~ 
+    \end{itemize}
+    \item ~infrastructure/bc_trainer.py~ 
+    \begin{itemize}
+        \item ~BCTrainer::collect_training_trajectories~ 
+        \item ~BCTrainer::train_agent~ 
+    \end{itemize}
+\end{itemize}
