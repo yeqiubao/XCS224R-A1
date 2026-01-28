@@ -1,0 +1,19 @@
+\item \points{2b} \noindent \textbf{Run DAgger} 
+
+\begin{tcolorbox}[width=\linewidth, sharp corners=all, colback=white!95!black]
+\begin{verbatim}
+python run_hw1.py \
+  --expert_policy_file xcs224r/policies/experts/Ant.pkl \
+  --env_name Ant-v4 --exp_name dagger_ant --n_iter 10 \
+  --do_dagger \
+  --expert_data xcs224r/expert_data/expert_data_Ant-v4.pkl \
+  --video_log_freq -1
+\end{verbatim}
+\end{tcolorbox}
+
+Run DAgger and report results on the two tasks you tested previously with behavioral cloning (i.e., Ant + another environment). Report your results in the form of a learning curve, plotting the number of DAgger iterations on the x-axis versus the policy’s mean return on the y-axis, with error bars to show the standard deviation. Include the performance of the expert policy and your behavioral cloning agent on the same plot. State which task you used, and any details regarding network architecture, amount of data, etc. (as in the previous section).\\
+
+🐍
+import re
+with open('submission.tex') as f: print((re.search(r'% <SCPD_SUBMISSION_TAG>_2b(.*?)% <SCPD_SUBMISSION_TAG>_2b', f.read(), re.DOTALL)).group(1))
+🐍

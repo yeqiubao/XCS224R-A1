@@ -1,0 +1,19 @@
+\section{Behavior Cloning}
+
+Behavior Cloning is the simplest form of Imitation Learning, where the agent learns a policy by treating the problem as a supervised learning task rather than a trial-and-error reinforcement challenge. In this approach, an expert provides a dataset of demonstrations consisting of specific state-action pairs ~(s,a)~, and the agent is trained to learn a mapping function (policy) that mimics the expert's actions given the same states.
+
+Unlike standard Reinforcement Learning, Behavior Cloning does not require a complex reward function or active exploration of the environment during training. Instead, the agent simply minimizes a loss function to replicate the expert's decisions.
+
+
+\begin{enumerate}[(a)]
+
+  \input{01-behavior-cloning/01-code}
+
+  \input{01-behavior-cloning/02-run}
+
+  \input{01-behavior-cloning/03-experiment}
+
+\end{enumerate}
+
+
+
