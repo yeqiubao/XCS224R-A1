@@ -69,7 +69,7 @@ def init_gpu(use_gpu=True, gpu_id=0):
     if torch.cuda.is_available() and use_gpu:
         device = torch.device("cuda:" + str(gpu_id))
         print("Using GPU id {}".format(gpu_id))
-    elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
+    elif torch.backends.mps.is_available() and torch.backends.mps.is_built() and use_gpu:
         device = torch.device("mps")
         print("PyTorch detects an Apple GPU: running on MPS")
     else:
