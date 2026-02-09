@@ -115,13 +115,22 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 
         :param observation: observation(s) to query the policy
         :return:
-            action: sampled action(s) from the policy
+            action distribution (torch.distributions.Distribution): a pytorch distribution representing
+                a diagonal Gaussian distribution whose mean (loc) is computed by
+                self.mean_net and standard deviation (scale) is torch.exp(self.logstd)
+
+        Note:
+            PyTorch doesn't have a diagonal Gaussian built in, but you can
+            fashion one out of
+            (a) torch.distributions.MultivariateNormal
+            or
+            (b) a combination of torch.distributions.Normal
+                             and torch.distributions.Independent
+
+            Please consult the following documentation for further details on
+            the use of probability distributions in Pytorch:
+            https://pytorch.org/docs/stable/distributions.html
         """
-        # TODO: implement the forward pass of the network.
-        # You can return anything you want, but you should be able to differentiate
-        # through it. For example, you can return a torch.FloatTensor. You can also
-        # return more flexible objects, such as a
-        # `torch.distributions.Distribution` object. It's up to you!
 
         # *** START CODE HERE ***
         # *** END CODE HERE ***
