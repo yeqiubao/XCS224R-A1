@@ -38,7 +38,7 @@ def build_mlp(
         Builds a feedforward neural network
 
         Arguments:
-            n_layers: number of hidden layers
+            n_layers: number of total layers, computed as number of hidden layers + 1
             size: dimension of each hidden layer
             activation: activation of each hidden layer
 
@@ -48,6 +48,30 @@ def build_mlp(
 
         Returns:
             MLP (nn.Module)
+
+
+        TODO:
+            Build a feed-forward network (multi-layer perceptron, or mlp) that maps
+            input_size-dimensional vectors to output_size-dimensional vectors.
+            It should have 'n_layers - 1' hidden layers, each of 'size' units and followed
+            by a nonlinearity function (`activation`). The final layer should be linear followed
+            by a nonlinearity function (`output_activation`).
+
+            Recall a hidden layer is a layer that occurs between the input and output
+            layers of the network.
+
+            As part of your implementation please make use of the following Pytorch
+            functionalities:
+            nn.Linear (https://pytorch.org/docs/stable/generated/torch.nn.Linear.html)
+            nn.Sequential (https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html)
+
+        Hint:
+            It is possible to create a list of nn.Modules and unpack these into nn.Sequential.
+            For example:
+                modules = []
+                modules.append(nn.Linear(10, 10))
+                modules.append(nn.Linear(10, 10))
+                model = nn.Sequential(*modules)
     """
     if isinstance(activation, str):
         activation = _str_to_activation[activation]
