@@ -29,8 +29,8 @@ The `Eval_AverageReturn` and `Eval_StdReturn` represent the mean and standard de
 
 | Environment | BC Mean Return | BC Std Return | Number of Rollouts | Expert Return | % of Expert | Status |
 |-------------|----------------|---------------|-------------------|---------------|------------|--------|
-| **Ant-v4** | 4573.85 | 135.19 | 5 | 4776.37 | **95.8%** | Pass (≥30%) |
-| **Hopper-v4** | 888.49 | 99.84 | ~19 | 3717.55 | **23.9%** | Fail (<30%) |
+| **Ant-v4** | 3714.17 | 1546.58 | ~6 | 4776.37 | **77.8%** | Pass (≥30%) |
+| **Hopper-v4** | 894.09 | 163.17 | ~18 | 3717.55 | **24.1%** | Fail (<30%) |
 
 ---
 
@@ -39,37 +39,37 @@ The `Eval_AverageReturn` and `Eval_StdReturn` represent the mean and standard de
 ### Task 1: Ant-v4 (Success Case)
 
 **BC Policy Performance:**
-- Mean Return: **4573.85**
-- Standard Deviation: **135.19**
-- Number of Evaluation Rollouts: **5** (from eval_batch_size=5000 timesteps ÷ 1000 steps/episode)
-- Average Episode Length: 1000.0 steps (full episodes)
+- Mean Return: **3714.17**
+- Standard Deviation: **1546.58**
+- Number of Evaluation Rollouts: **~6** (from eval_batch_size=5000 timesteps ÷ 859.17 steps/episode)
+- Average Episode Length: 859.17 steps (some episodes terminate early)
 
 **Expert Policy Performance:**
 - Mean Return: 4776.37
 - Standard Deviation: 65.96
 
 **Performance Comparison:**
-- BC achieves **95.8%** of expert performance
+- BC achieves **77.8%** of expert performance
 - **Status**: **PASSES** the 30% threshold requirement
 
-**Analysis**: BC works exceptionally well on Ant-v4. The policy successfully imitates the expert and maintains high performance, demonstrating that behavior cloning can be effective when distribution shift is minimal.
+**Analysis**: BC performs well on Ant-v4, achieving 77.8% of expert performance. While not as high as previous runs, it still demonstrates that behavior cloning can be effective when distribution shift is manageable. The higher standard deviation (1546.58) suggests some variability in performance across rollouts.
 
 ---
 
 ### Task 2: Hopper-v4 (Failure Case)
 
 **BC Policy Performance:**
-- Mean Return: **888.49**
-- Standard Deviation: **99.84**
-- Number of Evaluation Rollouts: **~19** (from eval_batch_size=5000 timesteps ÷ 263.05 steps/episode, episodes terminate early)
-- Average Episode Length: 263.05 steps (episodes terminate early, vs. full 1000 steps)
+- Mean Return: **894.09**
+- Standard Deviation: **163.17**
+- Number of Evaluation Rollouts: **~18** (from eval_batch_size=5000 timesteps ÷ 271.63 steps/episode, episodes terminate early)
+- Average Episode Length: 271.63 steps (episodes terminate early, vs. full 1000 steps)
 
 **Expert Policy Performance:**
 - Mean Return: 3717.55
 - Standard Deviation: 3.38
 
 **Performance Comparison:**
-- BC achieves **23.9%** of expert performance
+- BC achieves **24.1%** of expert performance
 - **Status**: **FAILS** the 30% threshold requirement
 
 **Analysis**: BC struggles significantly on Hopper-v4. The policy fails to maintain balance and episodes terminate early (average length of 263.05 steps vs. full 1000 steps). 
@@ -86,17 +86,17 @@ The `Eval_AverageReturn` and `Eval_StdReturn` represent the mean and standard de
 
 ## Key Observations
 
-1. **Ant-v4 Success**: BC achieves 95.8% of expert performance, demonstrating that behavior cloning can work well when:
+1. **Ant-v4 Success**: BC achieves 77.8% of expert performance, demonstrating that behavior cloning can work well when:
    - The task is relatively forgiving
    - Distribution shift is minimal
    - The policy can recover from small errors
 
-2. **Hopper-v4 Failure**: BC achieves only 23.9% of expert performance, demonstrating the limitations of behavior cloning:
-   - **Distribution shift** (inferred): The policy encounters states not seen in training, as evidenced by early termination (263.05 vs 1000 steps)
+2. **Hopper-v4 Failure**: BC achieves only 24.1% of expert performance, demonstrating the limitations of behavior cloning:
+   - **Distribution shift** (inferred): The policy encounters states not seen in training, as evidenced by early termination (271.63 vs 1000 steps)
    - **Compounding errors** (inferred): Small mistakes lead to early termination, suggesting errors accumulate over time
    - **Lack of exploration**: BC only learns from expert demonstrations, not from mistakes, so it cannot recover from deviations
 
-3. **Episode Length**: The difference in average episode length (1000.0 vs 263.05) clearly shows that the Hopper policy fails to maintain balance, while the Ant policy completes full episodes.
+3. **Episode Length**: The difference in average episode length (859.17 vs 271.63) clearly shows that the Hopper policy fails to maintain balance, while the Ant policy performs better but still has some early terminations.
 
 ---
 
@@ -104,9 +104,9 @@ The `Eval_AverageReturn` and `Eval_StdReturn` represent the mean and standard de
 
 This comparison demonstrates both the strengths and limitations of behavior cloning:
 
-- **Strengths**: Can achieve near-expert performance (95.8%) when the task is forgiving and errors don't compound (Ant-v4)
+- **Strengths**: Can achieve good performance (77.8%) when the task is forgiving and errors don't compound (Ant-v4)
 
-- **Limitations**: Fails (23.9% performance) when small errors lead to early termination (Hopper-v4). The evidence suggests this is due to:
+- **Limitations**: Fails (24.1% performance) when small errors lead to early termination (Hopper-v4). The evidence suggests this is due to:
   - **Distribution shift**: Policy encounters states not in training data (inferred from early termination)
   - **Compounding errors**: Small mistakes accumulate, leading to failure (inferred from pattern of early termination)
   - **No error recovery**: BC only learns from expert demonstrations, not from mistakes
@@ -131,12 +131,12 @@ I varied `num_agent_train_steps_per_iter` from 250 to 8000 steps while keeping a
 
 | Training Steps | BC Mean Return | % of Expert |
 |----------------|----------------|-------------|
-| 250 | 284.89 | 7.7% |
-| 500 | 741.58 | 19.9% |
-| 1000 | 888.49 | 23.9% |
-| 2000 | 903.49 | 24.3% |
-| 4000 | 899.79 | 24.2% |
-| 8000 | 1379.56 | 37.1% |
+| 250 | 247.61 | 6.7% |
+| 500 | 926.70 | 24.9% |
+| 1000 | 894.09 | 24.1% |
+| 2000 | 1098.05 | 29.5% |
+| 4000 | 858.93 | 23.1% |
+| 8000 | 992.74 | 26.7% |
 
 ![BC Performance vs Training Steps](bc_hyperparameter_sweep.png)
 
@@ -144,13 +144,13 @@ I varied `num_agent_train_steps_per_iter` from 250 to 8000 steps while keeping a
 
 The results show a clear relationship between training steps and performance:
 
-1. **Rapid improvement (250-1000 steps)**: Performance increases significantly from 284.89 to 888.49 return, demonstrating that the model benefits from more training.
+1. **Rapid improvement (250-500 steps)**: Performance increases significantly from 247.61 to 926.70 return, demonstrating that the model benefits from more training.
 
-2. **Diminishing returns (1000-4000 steps)**: Performance plateaus around 900 return, suggesting that additional training provides minimal benefit in this range.
+2. **Variable performance (500-8000 steps)**: Performance varies between 858.93 and 1098.05 return, with the best performance at 2000 steps (29.5% of expert). This suggests that the optimal number of training steps is around 2000, and additional training may not consistently improve performance.
 
-3. **Significant jump at 8000 steps**: Performance increases dramatically to 1379.56 return (37.1% of expert), nearly passing the 30% threshold. This suggests that very high training steps are needed for Hopper-v4, but the improvement comes at a significant computational cost.
+3. **Best performance at 2000 steps**: Performance peaks at 1098.05 return (29.5% of expert), just below the 30% threshold. This suggests that moderate training (2000 steps) is optimal for Hopper-v4, but even with optimal hyperparameters, BC struggles to reach expert-level performance.
 
-**Key Insight**: While increasing training steps improves performance, the relationship is non-linear. For Hopper-v4, substantial training (8000 steps) is required to achieve reasonable performance, but even then, the agent only reaches 37.1% of expert performance, highlighting the fundamental limitations of BC on this task.
+**Key Insight**: While increasing training steps can improve performance, the relationship is non-linear and shows variability. For Hopper-v4, optimal performance occurs around 2000 steps (29.5% of expert), but even with optimal hyperparameters, BC fails to consistently exceed 30% of expert performance, highlighting the fundamental limitations of BC on this task.
 
 ---
 
@@ -184,62 +184,62 @@ We ran DAgger experiments on both Ant-v4 and Hopper-v4 to compare with BC perfor
 
 | Iteration | Mean Return | Std Return | % of Expert |
 |-----------|-------------|------------|------------|
-| 0 (BC) | 4573.85 | 135.19 | 95.8% |
-| 1 | 4469.37 | 350.66 | 93.6% |
-| 2 | 4661.96 | 63.47 | 97.6% |
-| 3 | 4606.27 | 51.08 | 96.4% |
-| 4 | 3795.12 | 1369.12 | 79.5% |
-| 5 | 4588.24 | 99.20 | 96.1% |
-| 6 | 4712.77 | 76.21 | 98.7% |
-| 7 | 4802.35 | 91.42 | 100.5% |
-| 8 | 4681.51 | 167.36 | 98.0% |
-| 9 | 4798.53 | 102.66 | 100.5% |
+| 0 (BC) | 3714.17 | 1546.58 | 77.8% |
+| 1 | 4668.32 | 105.89 | 97.7% |
+| 2 | 4656.85 | 86.39 | 97.5% |
+| 3 | 4725.57 | 109.09 | 99.0% |
+| 4 | 4711.67 | 77.33 | 98.6% |
+| 5 | 4753.99 | 121.87 | 99.5% |
+| 6 | 4106.93 | 1249.01 | 86.0% |
+| 7 | 4673.31 | 122.43 | 97.8% |
+| 8 | 4659.56 | 87.43 | 97.6% |
+| 9 | 4704.09 | 121.77 | 98.5% |
 
 **Analysis:**
-- **BC Performance (Iteration 0)**: 4573.85 return (95.8% of expert)
-- **Final DAgger Performance (Iteration 9)**: 4798.53 return (100.5% of expert)
-- **Improvement**: DAgger achieves **expert-level performance** (100.5% of expert), slightly exceeding BC
-- **Stability**: Performance is consistent across iterations, with some variance in iteration 4
-- **Key Insight**: Ant-v4 already performs well with BC, so DAgger provides marginal improvement
+- **BC Performance (Iteration 0)**: 3714.17 return (77.8% of expert)
+- **Final DAgger Performance (Iteration 9)**: 4704.09 return (98.5% of expert)
+- **Improvement**: DAgger achieves **near-expert performance** (98.5% of expert), a significant improvement over BC
+- **Stability**: Performance improves dramatically from iteration 0 to 1, then stabilizes around 97-99% of expert
+- **Key Insight**: DAgger significantly improves upon BC performance on Ant-v4, demonstrating its effectiveness even when BC performs reasonably well
 
 #### Hopper-v4 DAgger Results
 
 | Iteration | Mean Return | Std Return | % of Expert |
 |-----------|-------------|------------|------------|
-| 0 (BC) | 888.49 | 99.84 | 23.9% |
-| 1 | 897.76 | 84.06 | 24.2% |
-| 2 | 1410.96 | 293.27 | 37.9% |
-| 3 | 1684.94 | 695.79 | 45.3% |
-| 4 | 3307.29 | 628.07 | 89.0% |
-| 5 | 2686.28 | 798.24 | 72.3% |
-| 6 | 3579.01 | 190.81 | 96.3% |
-| 7 | 3335.04 | 798.00 | 89.7% |
-| 8 | 3711.47 | 11.33 | 99.8% |
-| 9 | 3708.34 | 6.96 | 99.7% |
+| 0 (BC) | 894.09 | 163.17 | 24.1% |
+| 1 | 1534.61 | 788.68 | 41.3% |
+| 2 | 2435.12 | 750.33 | 65.5% |
+| 3 | 3685.05 | 13.28 | 99.1% |
+| 4 | 2493.55 | 903.27 | 67.1% |
+| 5 | 3694.54 | 13.66 | 99.4% |
+| 6 | 3716.36 | 4.42 | 100.0% |
+| 7 | 3710.62 | 7.25 | 99.8% |
+| 8 | 3632.38 | 221.07 | 97.7% |
+| 9 | 3721.90 | 8.45 | 100.1% |
 
 **Analysis:**
-- **BC Performance (Iteration 0)**: 888.49 return (23.9% of expert) - **FAILS** 30% threshold
-- **Final DAgger Performance (Iteration 9)**: 3708.34 return (99.7% of expert) - **PASSES** 30% threshold
-- **Improvement**: DAgger achieves **near-expert performance** (99.7% of expert), a dramatic 317% improvement over BC
-- **Learning Curve**: Shows clear improvement from iteration 0 to 8, with convergence near expert performance
-- **Key Insight**: DAgger successfully addresses the distribution shift problem that BC failed to solve
+- **BC Performance (Iteration 0)**: 894.09 return (24.1% of expert) - **FAILS** 30% threshold
+- **Final DAgger Performance (Iteration 9)**: 3721.90 return (100.1% of expert) - **PASSES** 30% threshold
+- **Improvement**: DAgger achieves **expert-level performance** (100.1% of expert), a dramatic 316% improvement over BC
+- **Learning Curve**: Shows clear improvement from iteration 0 to 3, with convergence near expert performance by iteration 3
+- **Key Insight**: DAgger successfully addresses the distribution shift problem that BC failed to solve, achieving expert-level performance
 
 ### Comparison: BC vs DAgger
 
 | Environment | BC Performance | DAgger Performance | Improvement |
 |-------------|----------------|-------------------|-------------|
-| **Ant-v4** | 4573.85 (95.8% of expert) | 4798.53 (100.5% of expert) | +4.9% (marginal) |
-| **Hopper-v4** | 888.49 (23.9% of expert) | 3708.34 (99.7% of expert) | +317% (dramatic) |
+| **Ant-v4** | 3714.17 (77.8% of expert) | 4704.09 (98.5% of expert) | +26.7% (significant) |
+| **Hopper-v4** | 894.09 (24.1% of expert) | 3721.90 (100.1% of expert) | +316% (dramatic) |
 
 ### Key Observations
 
-1. **Ant-v4**: Both BC and DAgger perform well, with DAgger achieving expert-level performance. The improvement is marginal because BC already solved the task effectively.
+1. **Ant-v4**: DAgger significantly improves upon BC performance, achieving 98.5% of expert performance compared to BC's 77.8%. This demonstrates DAgger's effectiveness even when BC performs reasonably well.
 
-2. **Hopper-v4**: DAgger dramatically outperforms BC, achieving 99.7% of expert performance compared to BC's 23.9%. This demonstrates DAgger's effectiveness at addressing distribution shift.
+2. **Hopper-v4**: DAgger dramatically outperforms BC, achieving 100.1% of expert performance compared to BC's 24.1%. This demonstrates DAgger's effectiveness at addressing distribution shift.
 
 3. **Learning Curves**: 
-   - **Ant-v4**: Stable performance throughout, with slight improvement over iterations
-   - **Hopper-v4**: Clear learning curve showing improvement from 23.9% to 99.7% of expert performance
+   - **Ant-v4**: Shows improvement from 77.8% to 98.5% of expert performance, with stable performance after iteration 1
+   - **Hopper-v4**: Clear learning curve showing rapid improvement from 24.1% to 100.1% of expert performance by iteration 3
 
 4. **Distribution Shift**: DAgger successfully mitigates the distribution shift problem by:
    - Collecting data from the current policy (encountering states the policy will see)
@@ -248,4 +248,4 @@ We ran DAgger experiments on both Ant-v4 and Hopper-v4 to compare with BC perfor
 
 ### Conclusion
 
-DAgger effectively addresses the distribution shift problem that limits BC performance, particularly on challenging tasks like Hopper-v4. While BC fails to reach 30% of expert performance on Hopper-v4, DAgger achieves near-expert performance (99.7%) through iterative data collection and expert relabeling. This validates DAgger as a superior approach for imitation learning when distribution shift is significant.
+DAgger effectively addresses the distribution shift problem that limits BC performance, particularly on challenging tasks like Hopper-v4. While BC fails to reach 30% of expert performance on Hopper-v4, DAgger achieves expert-level performance (100.1%) through iterative data collection and expert relabeling. This validates DAgger as a superior approach for imitation learning when distribution shift is significant.

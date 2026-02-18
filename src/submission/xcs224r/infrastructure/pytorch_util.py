@@ -84,22 +84,16 @@ def build_mlp(
 
     # *** START CODE HERE ***
     modules = []
+
+    modules.append(nn.Linear(input_size, size))
+    modules.append(activation)
     
-    # if layer is 1, then there is no hidden layer, we need to use output activation function
-    if n_layers == 1:
-        modules.append(nn.Linear(input_size, output_size))
-        modules.append(output_activation)
-    # layer is greater than 1, we need to use hidden layer and output activation function
-    else:
-        modules.append(nn.Linear(input_size, size))
+    for _ in range(n_layers - 1):
+        modules.append(nn.Linear(size, size))
         modules.append(activation)
-        
-        for _ in range(n_layers - 2):
-            modules.append(nn.Linear(size, size))
-            modules.append(activation)
-        
-        modules.append(nn.Linear(size, output_size))
-        modules.append(output_activation)
+    
+    modules.append(nn.Linear(size, output_size))
+    modules.append(output_activation)
 
     mlp = nn.Sequential(*modules)
     # *** END CODE HERE ***
