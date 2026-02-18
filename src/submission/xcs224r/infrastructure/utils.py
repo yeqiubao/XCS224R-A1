@@ -29,6 +29,7 @@ def sample_trajectory(env, policy, max_path_length, render=False):
     ob, info = None, None  # HINT: should be the output of resetting the env
 
     # *** START CODE HERE ***
+    ob, info = env.reset()
     # *** END CODE HERE ***
 
     # Initialize data storage for across the trajectory
@@ -51,6 +52,7 @@ def sample_trajectory(env, policy, max_path_length, render=False):
         obs.append(ob)
         ac = None # HINT: Query the policy's get_action functio
         # *** START CODE HERE ***
+        ac = policy.get_action(ob)
         # *** END CODE HERE ***
         ac = ac[0]
         acs.append(ac)
@@ -68,6 +70,7 @@ def sample_trajectory(env, policy, max_path_length, render=False):
 
         rollout_done =  None # HINT: this is either 0 or 1
         # *** START CODE HERE ***
+        rollout_done = 1 if (done or steps >= max_path_length) else 0
         # *** END CODE HERE ***
         
         terminals.append(rollout_done)
@@ -89,9 +92,10 @@ def sample_trajectories(env, policy, min_timesteps_per_batch, max_path_length, r
     paths = []
     while timesteps_this_batch < min_timesteps_per_batch:
 
-        pass
-
         # *** START CODE HERE ***
+        path = sample_trajectory(env, policy, max_path_length, render)
+        paths.append(path)
+        timesteps_this_batch += get_pathlength(path)
         # *** END CODE HERE ***
 
     return paths, timesteps_this_batch
@@ -106,7 +110,12 @@ def sample_n_trajectories(env, policy, ntraj, max_path_length, render=False):
     paths = []
 
     # *** START CODE HERE ***
+    for _ in range(ntraj):
+        path = sample_trajectory(env, policy, max_path_length, render)
+        paths.append(path)
     # *** END CODE HERE ***
+    
+    return paths
 
 ############################################
 ############################################

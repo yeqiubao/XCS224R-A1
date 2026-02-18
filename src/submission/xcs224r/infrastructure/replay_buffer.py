@@ -129,6 +129,15 @@ class ReplayBuffer():
         ## Note that rews, next_obs, and terminals are not used for BC
 
         # *** START CODE HERE ***
+        num_samples = self.obs.shape[0]
+        indices = np.random.permutation(num_samples)[:batch_size]
+        return (
+            self.obs[indices],
+            self.acs[indices],
+            self.rews[indices],
+            self.next_obs[indices],
+            self.terminals[indices],
+        )
         # *** END CODE HERE ***
 
     def sample_recent_data(self, batch_size=1):

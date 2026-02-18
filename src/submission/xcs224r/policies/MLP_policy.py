@@ -73,6 +73,7 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
             n_layers=self.n_layers, size=self.size,
         )
         self.mean_net.to(ptu.device)
+        #learnable log standard deviation (one per action dimension)
         self.logstd = nn.Parameter(
 
             torch.zeros(self.ac_dim, dtype=torch.float32, device=ptu.device)
@@ -107,6 +108,10 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         # TODO return the action that the policy prescribes
 
         # *** START CODE HERE ***
+        observation_tensor = ptu.from_numpy(observation)
+        action_distribution = self.forward(observation_tensor)
+        action = action_distribution.sample()
+        return ptu.to_numpy(action)
         # *** END CODE HERE ***
 
     def forward(self, observation: torch.FloatTensor) -> Any:
@@ -133,6 +138,14 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         """
 
         # *** START CODE HERE ***
+        mean = self.mean_net(observation)
+        std = torch.exp(self.logstd)
+
+        action_distribution = distributions.Independent(
+            distributions.Normal(loc=mean, scale=std),
+            reinterpreted_batch_ndims=1
+        )
+        return action_distribution
         # *** END CODE HERE ***
 
     def update(self, observations, actions):
@@ -148,4 +161,20 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         # you need to backpropagate the gradient and step the optimizer.
 
         # *** START CODE HERE ***
+        # convert to tensors
+        observations_tensor = ptu.from_numpy(observations)
+        actions_tensor = ptu.from_numpy(actions)
+        
+        # action distribution
+        action_distribution = self.forward(observations_tensor)
+        
+        # Compute negative log likelihood loss
+        loss = -action_distribution.log_prob(actions_tensor).mean()
+        
+        # Backpropagate and update the policy
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+        
+        return {'Training Loss': ptu.to_numpy(loss)}
         # *** END CODE HERE ***
