@@ -17,9 +17,9 @@ All experiments used **identical hyperparameters** for fair comparison. These we
 
 **Source**: These hyperparameters were specified in `run_bc_experiments.sh` and match the defaults in `run_hw1.py` for parameters not explicitly overridden.
 
-**Note on Evaluation**: With `eval_batch_size=5000` timesteps and `ep_len=1000`, we collect multiple rollouts per evaluation. The exact number depends on episode length:
-- **Ant-v4**: 5000 timesteps ÷ 1000 steps/episode = **5 rollouts**
-- **Hopper-v4**: 5000 timesteps ÷ 263.05 steps/episode ≈ **19 rollouts** (episodes terminate early)
+**Note on Evaluation**: With `eval_batch_size=5000` timesteps, we collect multiple rollouts per evaluation. The exact number depends on the average episode length (which may be less than the maximum episode length if episodes terminate early):
+- **Ant-v4**: 5000 timesteps ÷ 859.17 steps/episode ≈ **~6 rollouts** (some episodes terminate early)
+- **Hopper-v4**: 5000 timesteps ÷ 271.63 steps/episode ≈ **~18 rollouts** (episodes terminate early)
 
 The `Eval_AverageReturn` and `Eval_StdReturn` represent the mean and standard deviation over these multiple rollouts.
 
@@ -72,11 +72,11 @@ The `Eval_AverageReturn` and `Eval_StdReturn` represent the mean and standard de
 - BC achieves **24.1%** of expert performance
 - **Status**: **FAILS** the 30% threshold requirement
 
-**Analysis**: BC struggles significantly on Hopper-v4. The policy fails to maintain balance and episodes terminate early (average length of 263.05 steps vs. full 1000 steps). 
+**Analysis**: BC struggles significantly on Hopper-v4. The policy fails to maintain balance and episodes terminate early (average length of 271.63 steps vs. full 1000 steps). 
 
 **Evidence for distribution shift and compounding errors:**
-1. **Early termination**: Episodes end at ~263 steps instead of 1000, suggesting the policy deviates from expert trajectories
-2. **Low performance**: Only 23.9% of expert performance indicates the policy makes mistakes
+1. **Early termination**: Episodes end at ~272 steps (271.63 average) instead of 1000, suggesting the policy deviates from expert trajectories
+2. **Low performance**: Only 24.1% of expert performance indicates the policy makes mistakes
 3. **Comparison with Ant**: Ant succeeds (95.8%) with same hyperparameters, suggesting Hopper is more sensitive to errors
 4. **Standard BC failure pattern**: This pattern (early termination, compounding errors) is characteristic of distribution shift in behavior cloning literature
 
