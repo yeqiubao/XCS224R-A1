@@ -104,6 +104,7 @@ $$A^\pi(s, a) = Q^\pi(s, a) - V^\pi(s)$$
 
 **Useful relation**:
 $$V^\pi(s) = \mathbb{E}_{a \sim \pi(\cdot \mid s)} Q^\pi(s, a)$$
+Value function is the avg of the Q function over all possible actions 
 
 ### Types of RL Algorithms
 
@@ -258,13 +259,21 @@ Use sum of **future rewards** (reward-to-go).
 
 #### 2. Introducing Baselines
 
+![Page 82: Introducing Baselines](XCS224R-Mod1-page82.png)
+
 Subtract a constant baseline $b$ (e.g., average reward):
 $$\nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=1}^T \nabla_\theta \log \pi_\theta(a_{i,t} \mid s_{i,t}) \left( \sum_{t'=t}^T r(s_{i,t'}, a_{i,t'}) - b \right)$$
+
+**Intuition**: If we subtract average reward, we get negative gradients for below-average behavior.
+
+**Key insight**: Using a convenient identity, subtracting a constant baseline is unbiased (change to the gradient is 0 in expectation) and can reduce variance of the gradient.
 
 **Properties**:
 - Subtracting constant baseline is unbiased (change to gradient is 0 in expectation)
 - Can reduce variance of gradient
-- Average reward is a good baseline
+- Average reward is a pretty good baseline
+
+**Example**: Consider trajectories $\tau^1$ (falls forwards) and $\tau^4$ (runs forwards). By subtracting the average reward as a baseline, we get negative gradients for below-average behavior (falling) and positive gradients for above-average behavior (running), making the learning signal clearer.
 
 ### Implementation
 
@@ -332,6 +341,9 @@ Use better estimate of expected future rewards:
 $$\hat{A}^\pi(s_{i,t}, a_{i,t}) = Q^\pi(s_{i,t}, a_{i,t}) - V^\pi(s_{i,t})$$
 
 **Gradient**:
+
+![Page 91: Online RL Outline](XCS224R-Mod1-page91.png)
+
 $$\nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=1}^T \nabla_\theta \log \pi_\theta(a_{i,t} \mid s_{i,t}) \hat{A}^\pi(s_{i,t}, a_{i,t})$$
 
 ### Estimating Value Functions
